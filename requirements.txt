@@ -1,0 +1,6 @@
+platform
+cpuinfo
+psutil
+plyer
+os
+subprocess
