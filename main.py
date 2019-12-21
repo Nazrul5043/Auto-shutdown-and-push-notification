@@ -77,7 +77,7 @@ def push_notification(title,message,app_name,timeout):
 if __name__ == "__main__":
     office_closing_time_string = "17:30:00"
     lunch_time = "13:00:00"
-    refresh_time = "3:12:50"
+    refresh_time = "1:00:00"
     while True:
         main(refresh_time,lunch_time,office_closing_time_string)
         time.sleep(1)
