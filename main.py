@@ -60,6 +60,8 @@ def check_uptime():
 def auto_shutdown():
     #shutdown
     #subprocess.call(["shutdown", "-f", "-s", "-t", "1"])
+    #restart
+    #subprocess.call(["shutdown", "-f", "-r", "-t", "1"])
     print("shutdown")
 def push_notification(title,message,app_name,timeout):
     if platform.system() == "Windows":
