@@ -14,7 +14,7 @@ from datetime import datetime,timedelta
 import time
 
 
-def main(refresh_time,lunch_time,office_closing_time_string):
+def main(refresh_time,lunch_time,office_closing_time_string,r):
     #get current time
     now = datetime.now().replace(microsecond=0)
     
@@ -29,26 +29,30 @@ def main(refresh_time,lunch_time,office_closing_time_string):
     #get cpu up time
     uptime = str(check_uptime())
 
-    
-    if uptime == refresh_time:
-        #push notification
-        title = "Warning"
-        message = "Stop Workings for 5 mins."
-        app_name = "Time Checker"
-        timeout = 60
-        push_notification(title,message,app_name,timeout)
-    elif now == lunch_time_stamp:
+    if now == lunch_time_stamp:
         #push notification
         title = "Warning"
         message = "Stop Workings,Its Lunch time."
         app_name = "Time Checker"
         timeout = 60
         push_notification(title,message,app_name,timeout)
+    elif uptime == refresh_time:
+        #push notification
+        title = "Warning"
+        message = "Stop Workings for 5 mins."
+        app_name = "Time Checker"
+        timeout = 60
+        push_notification(title,message,app_name,timeout)
+        r+=1
+        refresh_time = str(r)+":00:00"
     elif now > time_stamp:
         auto_shutdown()
     else:
         pass
-                     
+    #again call main function
+    time.sleep(1)
+    main(refresh_time,lunch_time,office_closing_time_string,r)
+    
 def check_uptime():
     boot_start_time = datetime.fromtimestamp(psutil.boot_time())
     now_time = datetime.now().replace(microsecond=0)
@@ -78,8 +82,9 @@ if __name__ == "__main__":
     office_closing_time_string = "17:30:00"
     lunch_time = "13:00:00"
     refresh_time = "1:00:00"
+    r = 1
     while True:
-        main(refresh_time,lunch_time,office_closing_time_string)
+        main(refresh_time,lunch_time,office_closing_time_string,r)
         time.sleep(1)
  
 
