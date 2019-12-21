@@ -83,8 +83,7 @@ if __name__ == "__main__":
     lunch_time = "13:00:00"
     refresh_time = "1:00:00"
     r = 1
-    while True:
-        main(refresh_time,lunch_time,office_closing_time_string,r)
-        time.sleep(1)
+    main(refresh_time,lunch_time,office_closing_time_string,r)
+       
  
 
