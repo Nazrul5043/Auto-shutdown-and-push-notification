@@ -7,45 +7,79 @@
 import platform
 import cpuinfo
 import psutil
+from plyer import notification
 import os
 import subprocess
-from datetime import datetime
+from datetime import datetime,timedelta
+import time
 
 
-def main(office_closing_time_string,lunch_time):
+def main(refresh_time,lunch_time,office_closing_time_string):
     #get current time
     now = datetime.now().replace(microsecond=0)
+    
     #convert string to datetime formate
     office_closing_date_time = datetime.strptime(office_closing_time_string, "%H:%M:%S")
     time_stamp = now.replace(hour=office_closing_date_time.time().hour, minute=office_closing_date_time.time().minute, second=office_closing_date_time.time().second, microsecond=0)
-    #get cpu up time
-    uptime = check_uptime()
 
-    if(now.time() == lunch_time):
+    #comvert lunch time
+    lunch_date_time = datetime.strptime(lunch_time, "%H:%M:%S")
+    lunch_time_stamp = now.replace(hour=lunch_date_time.time().hour, minute=lunch_date_time.time().minute, second=lunch_date_time.time().second, microsecond=0)
+
+    #get cpu up time
+    uptime = str(check_uptime())
+
+    
+    if(uptime == refresh_time):
         #push notification
-        print("Stop Workings,Its Lunch time.")
-    if(now > time_stamp):
+        title = "Warning"
+        message = "Stop Workings for 5 mins."
+        app_name = "Time Checker"
+        timeout = 60
+        push_notification(title,message,app_name,timeout)
+    elif(now == lunch_time_stamp):
+        #push notification
+        title = "Warning"
+        message = "Stop Workings,Its Lunch time."
+        app_name = "Time Checker"
+        timeout = 60
+        push_notification(title,message,app_name,timeout)
+    elif(now > time_stamp):
         auto_shutdown()
     else:
-        print("Up Time",uptime)
+        pass
+        
             
     
 def check_uptime():
     boot_start_time = datetime.fromtimestamp(psutil.boot_time())
     now_time = datetime.now().replace(microsecond=0)
     uptime = now_time - boot_start_time
-    #print("Up Time",now_time -boot_start_time)
     return (now_time - boot_start_time)
 
 def auto_shutdown():
     #shutdown
-    subprocess.call(["shutdown", "-f", "-s", "-t", "1"])
-    #print("shutdown")
-
+    #subprocess.call(["shutdown", "-f", "-s", "-t", "1"])
+    print("shutdown")
+def push_notification(title,message,app_name,timeout):
+    if platform.system() == "Windows":
+        app_icon = 'icon/timemachine.ico'
+    else:
+        app_icon = 'icon/alarm-icon.png'
+    notification.notify(
+        title = title,
+        message = message,
+        app_name = app_name,
+        app_icon = app_icon,
+        timeout =  timeout
+        )
         
 if __name__ == "__main__":
     office_closing_time_string = "17:30:00"
     lunch_time = "13:00:00"
-    main(office_closing_time_string,lunch_time)
+    refresh_time = "3:12:50"
+    while True:
+        main(refresh_time,lunch_time,office_closing_time_string)
+        time.sleep(1)
  
 
