@@ -30,27 +30,25 @@ def main(refresh_time,lunch_time,office_closing_time_string):
     uptime = str(check_uptime())
 
     
-    if(uptime == refresh_time):
+    if uptime == refresh_time:
         #push notification
         title = "Warning"
         message = "Stop Workings for 5 mins."
         app_name = "Time Checker"
         timeout = 60
         push_notification(title,message,app_name,timeout)
-    elif(now == lunch_time_stamp):
+    elif now == lunch_time_stamp:
         #push notification
         title = "Warning"
         message = "Stop Workings,Its Lunch time."
         app_name = "Time Checker"
         timeout = 60
         push_notification(title,message,app_name,timeout)
-    elif(now > time_stamp):
+    elif now > time_stamp:
         auto_shutdown()
     else:
         pass
-        
-            
-    
+                     
 def check_uptime():
     boot_start_time = datetime.fromtimestamp(psutil.boot_time())
     now_time = datetime.now().replace(microsecond=0)
